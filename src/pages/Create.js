@@ -1,5 +1,7 @@
 import React from "react";
 import { Typography, Button, Container } from "@material-ui/core";
+import PublishIcon from "@material-ui/icons/Publish";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 
 export default function Create() {
   return (
@@ -19,16 +21,12 @@ export default function Create() {
         type="submit"
         color="secondary"
         variant="contained"
+        startIcon={<PublishIcon />}
+        endIcon={<ArrowForwardIosIcon />}
       >
         Submit
       </Button>
-
-      {/* <ButtonGroup color="secondary" variant="contained">
-        <Button>One</Button>
-        <Button>Two</Button>
-        <Button>Three</Button>
-        <Button>Four</Button>
-      </ButtonGroup> */}
+      <br />
     </Container>
   );
 }
