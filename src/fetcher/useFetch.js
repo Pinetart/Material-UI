@@ -7,26 +7,24 @@ const useFetch = (url) => {
 
   useEffect(() => {
     const abortConn = new AbortController();
-    setTimeout(() => {
-      fetch(url, { signal: abortConn.signal })
-        .then((res) => {
-          if (!res.ok) {
-            throw Error(`${res.status} - Could not fetch data from resource`);
-          }
-          return res.json();
-        })
-        .then(() => {
-          setError(null);
+    fetch(url, { signal: abortConn.signal })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error(`${res.status} - Could not fetch data from resource`);
+        }
+        return res.json();
+      })
+      .then(() => {
+        setError(null);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") {
+        } else {
+          setError(err.message);
           setIsLoading(false);
-        })
-        .catch((err) => {
-          if (err.name === "AbortError") {
-          } else {
-            setError(err.message);
-            setIsLoading(false);
-          }
-        });
-    }, 2000);
+        }
+      });
 
     return () => abortConn.abort();
   }, [url]);
