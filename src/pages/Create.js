@@ -12,7 +12,9 @@ import {
 } from "@material-ui/core"; //Components
 import PublishIcon from "@material-ui/icons/Publish";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import CachedIcon from "@material-ui/icons/Cached";
 import { makeStyles } from "@material-ui/core"; //Functions
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles({
   field: {
@@ -24,24 +26,31 @@ const useStyles = makeStyles({
 
 export default function Create() {
   const classes = useStyles();
+  const history = useHistory();
 
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
   const [category, setCategory] = useState("todos");
   const [titleError, setTitleError] = useState(false);
   const [detailsError, setDetailsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     title == "" ? setTitleError(true) : setTitleError(false);
     details == "" ? setDetailsError(true) : setDetailsError(false);
     title && details
-      ? fetch(" http://localhost:8000/notes", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title, details, category }),
-        })
+      ? setTimeout(() => {
+          fetch(" http://localhost:8000/notes", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title, details, category }),
+          }).then(() => {
+            setIsLoading(false);
+            history.push("/");
+          });
+        }, 1200)
       : console.log("fail");
 
     setTitle("");
@@ -110,15 +119,28 @@ export default function Create() {
           </RadioGroup>
         </FormControl>
 
-        <Button
-          type="submit"
-          color="primary"
-          variant="contained"
-          startIcon={<PublishIcon />}
-          endIcon={<ArrowForwardIosIcon />}
-        >
-          Submit
-        </Button>
+        {!isLoading && (
+          <Button
+            type="submit"
+            color="primary"
+            variant="contained"
+            startIcon={<PublishIcon />}
+            endIcon={<ArrowForwardIosIcon />}
+          >
+            Submit
+          </Button>
+        )}
+
+        {isLoading && (
+          <Button
+            type="submit"
+            color="primary"
+            variant="contained"
+            endIcon={<CachedIcon />}
+          >
+            Submitting Record
+          </Button>
+        )}
       </form>
     </Container>
   );
