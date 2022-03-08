@@ -11,12 +11,19 @@ const useStyles = makeStyles({
   page: {
     background: "#f9f9f9",
     width: "100%",
+    paddingTop: 30,
+    paddingBottom: 30,
   },
   drawer: { width: drawerWidth },
   drawerPaper: { width: drawerWidth },
   root: { display: "flex" },
   active: {
     background: "#D3D3D3",
+  },
+  title: {
+    textAlign: "center",
+    paddingTop: 15,
+    PaddingBottom: 30,
   },
 });
 
@@ -48,7 +55,9 @@ const Layout = ({ children }) => {
         classes={{ paper: classes.drawerPaper }}
       >
         <div>
-          <Typography variant="h5">Ninja Notes</Typography>
+          <Typography variant="h5" className={classes.title}>
+            Ninja Notes
+          </Typography>
         </div>
         <List>
           {menuItems.map((item) => (
