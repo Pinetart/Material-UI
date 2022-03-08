@@ -24,18 +24,29 @@ const useStyles = makeStyles({
 
 export default function Create() {
   const classes = useStyles();
+
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
+  const [category, setCategory] = useState("todos");
   const [titleError, setTitleError] = useState(false);
   const [detailsError, setDetailsError] = useState(false);
-  const [category, setCategory] = useState("todos");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     title == "" ? setTitleError(true) : setTitleError(false);
     details == "" ? setDetailsError(true) : setDetailsError(false);
-    console.log(category);
+    title && details
+      ? fetch(" http://localhost:8000/notes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ title, details, category }),
+        })
+      : console.log("fail");
+
+    setTitle("");
+    setDetails("");
+    setCategory("todos");
   };
 
   return (
@@ -59,6 +70,7 @@ export default function Create() {
           variant="outlined"
           color="secondary"
           required
+          value={title}
           className={classes.field}
           fullWidth
           error={titleError}
@@ -71,6 +83,7 @@ export default function Create() {
           variant="outlined"
           color="secondary"
           required
+          value={details}
           className={classes.field}
           fullWidth
           multiline
