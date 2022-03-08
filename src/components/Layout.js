@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Avatar,
   Drawer,
   makeStyles,
   Toolbar,
@@ -38,6 +39,9 @@ const useStyles = makeStyles((theme) => {
     },
     toolbar: theme.mixins.toolbar,
     date: { flexGrow: 1 },
+    avatar: {
+      marginLeft: theme.spacing(2),
+    },
   };
 });
 
@@ -98,6 +102,7 @@ const Layout = ({ children }) => {
             Today is the {format(new Date(), "do MMMM Y")}
           </Typography>
           <Typography>Mario</Typography>
+          <Avatar className={classes.avatar} src="/mario-av.png" />
         </Toolbar>
       </AppBar>
 

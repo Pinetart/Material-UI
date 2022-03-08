@@ -137,6 +137,7 @@ export default function Create() {
             color="primary"
             variant="contained"
             endIcon={<CachedIcon />}
+            style={{ pointerEvents: "none" }}
           >
             Submitting Record
           </Button>
