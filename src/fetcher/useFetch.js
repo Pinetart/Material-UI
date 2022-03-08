@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 const useFetch = (url) => {
-  const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,10 +15,9 @@ const useFetch = (url) => {
           }
           return res.json();
         })
-        .then((jsonData) => {
+        .then(() => {
           setError(null);
           setIsLoading(false);
-          setData(jsonData);
         })
         .catch((err) => {
           if (err.name === "AbortError") {
@@ -32,7 +30,7 @@ const useFetch = (url) => {
 
     return () => abortConn.abort();
   }, [url]);
-  return { data, error, isLoading };
+  return { error, isLoading };
 };
 
 export default useFetch;

@@ -1,16 +1,30 @@
-import { React, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import useFetch from "../fetcher/useFetch";
-import { Typography, Container } from "@material-ui/core";
+import { Typography, Container, Grid, Paper } from "@material-ui/core";
+import NoteCard from "../components/NoteCard";
 
 export default function Notes() {
-  const {
-    data: notes,
-    error,
-    isLoading,
-  } = useFetch("http://localhost:8000/notes");
+  const { error, isLoading } = useFetch("http://localhost:8000/notes");
+
+  const [notes, setNotes] = useState(null);
+  useEffect(() => {
+    fetch("http://localhost:8000/notes")
+      .then((res) => {
+        return res.json();
+      })
+      .then((jsonData) => {
+        setNotes(jsonData);
+      });
+  }, []);
+
+  const handleDelete = async (id) => {
+    await fetch(`http://localhost:8000/notes/${id}`, { method: "DELETE" });
+    const newNotes = notes.filter((note) => note.id !== id);
+    setNotes(newNotes);
+  };
 
   return (
-    <div>
+    <Container>
       {error && (
         <Container
           maxWidth="md"
@@ -43,8 +57,14 @@ export default function Notes() {
           </Typography>
         </Container>
       )}
-      {console.log(notes)}
-      {notes && notes.map((note) => <p key={note.id}>{note.title}</p>)}
-    </div>
+      <Grid container spacing={3}>
+        {notes &&
+          notes.map((note) => (
+            <Grid item key={note.id} xs={12} md={6} lg={4}>
+              <NoteCard note={note} handleDelete={handleDelete} />
+            </Grid>
+          ))}
+      </Grid>
+    </Container>
   );
 }
