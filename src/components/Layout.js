@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => {
       width: "100%",
       paddingTop: 30,
       paddingBottom: 30,
+      height: "100vh",
     },
     drawer: { width: drawerWidth },
     drawerPaper: { width: drawerWidth },
