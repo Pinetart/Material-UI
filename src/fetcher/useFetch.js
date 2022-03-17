@@ -4,6 +4,7 @@ import { useState } from "react";
 const useFetch = (url) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     const abortConn = new AbortController();
@@ -14,9 +15,11 @@ const useFetch = (url) => {
         }
         return res.json();
       })
-      .then(() => {
+      .then((jsonData) => {
         setError(null);
         setIsLoading(false);
+        setData(jsonData);
+        // console.log(jsonData);
       })
       .catch((err) => {
         if (err.name === "AbortError") {
@@ -28,7 +31,7 @@ const useFetch = (url) => {
 
     return () => abortConn.abort();
   }, [url]);
-  return { error, isLoading };
+  return { error, isLoading, data };
 };
 
 export default useFetch;

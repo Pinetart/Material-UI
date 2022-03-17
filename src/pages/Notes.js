@@ -1,33 +1,19 @@
 import { React, useState, useEffect } from "react";
 import useFetch from "../fetcher/useFetch";
 import { Typography, Container, Grid } from "@material-ui/core";
-import NoteCard from "../components/NoteCard";
-import Masonry from "react-masonry-css";
+import NoteList from "../components/NoteList";
 
 export default function Notes() {
-  const { error, isLoading } = useFetch("http://localhost:8000/notes");
+  const { error, isLoading, data } = useFetch("http://localhost:8000/notes");
 
   const [notes, setNotes] = useState(null);
-  useEffect(() => {
-    fetch("http://localhost:8000/notes")
-      .then((res) => {
-        return res.json();
-      })
-      .then((jsonData) => {
-        setNotes(jsonData);
-      });
-  }, []);
 
-  const handleDelete = async (id) => {
-    await fetch(`http://localhost:8000/notes/${id}`, { method: "DELETE" });
-    const newNotes = notes.filter((note) => note.id !== id);
-    setNotes(newNotes);
-  };
-  const breakpoints = {
-    default: 3,
-    1100: 2,
-    700: 1,
-  };
+  useEffect(() => {
+    if (data) {
+      setNotes(data);
+    }
+  }, [data]);
+
   return (
     <Container>
       {error && (
@@ -70,18 +56,7 @@ export default function Notes() {
             </Grid>
           ))}
       </Grid> */}
-      <Masonry
-        breakpointCols={breakpoints}
-        className="my-masonry-grid"
-        columnClassName="my-masonry-grid_column"
-      >
-        {notes &&
-          notes.map((note) => (
-            <div item key={note.id}>
-              <NoteCard note={note} handleDelete={handleDelete} />
-            </div>
-          ))}
-      </Masonry>
+      {notes && <NoteList notes={notes} setNotes={setNotes} />}
     </Container>
   );
 }
